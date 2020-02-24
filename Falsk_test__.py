@@ -10,9 +10,10 @@ from flask import abort, redirect,render_template
 #from myapp import app
 #app= DebugApplication(app,evalex= True)
 app= Flask(__name__)
-@app.route(404)
+@app.errorhandler(404)
 def page_404(error):
-    return render_template('你迷失了/n 不过这是正常的'),404
+    return render_template('你迷失了/n 不过这是正常的.html'),404
+@app.error_handler(404)
 @app.route('/')
 def index():
     usernm= request.cookies.get('username')
@@ -20,6 +21,8 @@ def index():
     return redirect(url_for("login"))
 @app.route('/login')
 def login():
+    abort(401)
+    this_is_never_executed()
     return 'login!!!!!!!'
 @app.route('/hello')
 def hello():
@@ -38,6 +41,14 @@ def upload_files():
     if request.method == 'POST':
         F_= request.files["the_F"]
         F_.save('/var/www/uploads/'+secure_filename(F_.filename))
+@app.route('/me')
+def me_api():
+    user= get_current_user()
+    return {
+        'username': user.username,
+        'theme': user.theme,
+        'image': url_for("user_image",filename= user.image),
+    }
 with app.test_request_context():
     print(url_for('index'))
     print(url_for('login'))
