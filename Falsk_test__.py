@@ -5,13 +5,19 @@ from flask import escape
 from flask import url_for
 from flask import request
 from werkzeug.utils import secure_filename
+from flask import abort, redirect,render_template
 #from werzeug.debug import DebugApplication
 #from myapp import app
 #app= DebugApplication(app,evalex= True)
 app= Flask(__name__)
+@app.route(404)
+def page_404(error):
+    return render_template('你迷失了/n 不过这是正常的')，404
 @app.route('/')
 def index():
-    return "hello WORLD!!!!"
+    usernm= request.cookies.get('username')
+    print (usernm) #test
+    return redirect(url_for("login"))
 @app.route('/login')
 def login():
     return 'login!!!!!!!'
@@ -31,7 +37,7 @@ def show_subpath(path):
 def upload_files():
     if request.method == 'POST':
         F_= request.files["the_F"]
-        F_.save('/var/www/uploads/'+secure_filename(f.filename))
+        F_.save('/var/www/uploads/'+secure_filename(F_.filename))
 with app.test_request_context():
     print(url_for('index'))
     print(url_for('login'))
