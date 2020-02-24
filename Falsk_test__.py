@@ -6,6 +6,7 @@ from flask import url_for
 from flask import request
 from werkzeug.utils import secure_filename
 from flask import abort, redirect,render_template,get_flashed_messages
+from flask import session
 #from werzeug.debug import DebugApplication
 #from myapp import app
 #app= DebugApplication(app,evalex= True)
@@ -13,17 +14,24 @@ app= Flask(__name__)
 @app.errorhandler(404)
 def page_404(error):
     return render_template('你迷失了/n 不过这是正常的.html'),404
-@app.error_handler(404)
 @app.route('/')
 def index():
     usernm= request.cookies.get('username')
-    print (usernm) #test
-    return redirect(url_for("login"))
-@app.route('/login')
+    if 'username' in session:
+        return 'logged in as %s ' % escape(session['username'])
+    return 'you re not logged in'
+@app.route('/login',methods= ['GET','POST'])
 def login():
-    abort(401)
-    this_is_never_executed()
+    pass
+    if request.method == 'POST':
+        session['username']= request.form('index')
+        return redirect(url_for('index'))
     return 'login!!!!!!!'
+@app.route('/logout')
+def logout():
+    session.pop('username',None)
+    return redirect(url_for('index'))
+
 @app.route('/hello')
 def hello():
     return "test holeeeasx;askx;ak;XKA;JXKAJX"
@@ -43,7 +51,7 @@ def upload_files():
         F_.save('/var/www/uploads/'+secure_filename(F_.filename))
 @app.route('/me')
 def me_api():
-    user= get_current_user()
+    user=' get_current_user()'
     return {
         'username': user.username,
         'theme': user.theme,
