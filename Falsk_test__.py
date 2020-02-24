@@ -12,7 +12,7 @@ from flask import abort, redirect,render_template
 app= Flask(__name__)
 @app.route(404)
 def page_404(error):
-    return render_template('你迷失了/n 不过这是正常的')，404
+    return render_template('你迷失了/n 不过这是正常的'),404
 @app.route('/')
 def index():
     usernm= request.cookies.get('username')
