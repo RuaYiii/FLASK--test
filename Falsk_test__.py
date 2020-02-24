@@ -4,6 +4,7 @@ from flask import Flask
 from flask import escape
 from flask import url_for
 from flask import request
+from werkzeug.utils import secure_filename
 #from werzeug.debug import DebugApplication
 #from myapp import app
 #app= DebugApplication(app,evalex= True)
