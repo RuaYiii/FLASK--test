@@ -52,11 +52,11 @@ def upload_files():
 @app.route('/me')
 def me_api():
     user=' get_current_user()'
-    return {
+    '''return {
         'username': user.username,
         'theme': user.theme,
         'image': url_for("user_image",filename= user.image),
-    }
+    }'''
 with app.test_request_context():
     print(url_for('index'))
     print(url_for('login'))
